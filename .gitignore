@@ -1,3 +1,11 @@
 java-maven-sonar-argocd-helm-k8s/spring-boot-app/target/
 target/
-/target/**
+/target/*
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.logs
+*.iml
+.idea/
