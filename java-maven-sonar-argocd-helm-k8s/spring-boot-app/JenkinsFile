@@ -7,7 +7,14 @@ pipeline {
   }
   stages {
 
-     stage('Check Changes') {
+    
+    stage('Checkout') {
+      steps {
+        sh 'echo passed'
+        //git branch: 'main', url: 'https://github.com/revanth226/Jenkins-Zero-To-Hero.git'
+      }
+    }
+    stage('Check Changes') {
             steps {
                 script {
                     // Check if Kubernetes manifests or specific files/folders are modified
@@ -24,12 +31,6 @@ pipeline {
                     }
                 }
             }
-    stage('Checkout') {
-      steps {
-        sh 'echo passed'
-        //git branch: 'main', url: 'https://github.com/revanth226/Jenkins-Zero-To-Hero.git'
-      }
-    }
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
