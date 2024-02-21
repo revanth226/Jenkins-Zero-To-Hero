@@ -23,10 +23,9 @@ pipeline {
                         error "No changes detected in the Git repository"
                     }
                     
-                    // Filter out YAML files associated with Kubernetes manifests
+                    // Filter out YAML files
                     def filteredFiles = changedFiles.split('\n').findAll { file ->
-                        // Modify this condition based on your Kubernetes manifest file structure
-                        !(file.endsWith('.yml') && file.startsWith('kubernetes/'))
+                        !file.endsWith('.yml') && !file.endsWith('.yaml')
                     }
                     
                     if (filteredFiles.isEmpty()) {
