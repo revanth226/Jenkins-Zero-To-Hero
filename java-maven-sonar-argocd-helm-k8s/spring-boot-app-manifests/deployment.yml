@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: spring-boot-app
-        image: revanth1226/ultimate-cicd:27
+        image: revanth1226/ultimate-cicd:28
         ports:
         - containerPort: 8080
