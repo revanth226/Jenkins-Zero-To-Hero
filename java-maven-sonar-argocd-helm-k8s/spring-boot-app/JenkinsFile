@@ -78,7 +78,7 @@ pipeline {
         steps {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                 sh '''
-                    git config user.email "abhishek.xyz@gmail.com"
+                    git config user.email "abhishek.yz@gmail.com"
                     git config user.name "Revanth KumarG"
                     BUILD_NUMBER=${BUILD_NUMBER}
                     sed -i 's+revanth1226/ultimate-cicd.*+revanth1226/ultimate-cicd:replaceImageTag+g' java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
