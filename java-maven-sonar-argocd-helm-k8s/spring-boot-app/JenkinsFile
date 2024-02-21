@@ -17,14 +17,19 @@ pipeline {
     stage('Check Changes') {
             steps {
                 script {
-                    // Check if Kubernetes manifests or specific files/folders are modified
-                    def changedFiles = sh(script: 'git diff --name-only HEAD^ HEAD', returnStdout: true).trim().split('\n')
-                    def k8sFilesToCheck = ['*.yaml'] // Define Kubernetes manifests or specific files/folders to check
+                    def changedFiles = sh(script: 'git diff --name-only HEAD^ HEAD', returnStdout: true).trim()
+                    def k8sFilesToCheck = ['kubernetes/*.yaml', 'config/*.yaml']
                     
-                    // Check if any changed files match the ones to check
-                    def filesMatched = changedFiles.intersect(k8sFilesToCheck)
+                    if (changedFiles.isEmpty()) {
+                        error "No changes detected in the Git repository"
+                    }
                     
-                    // If no matching files are found, abort the build
+                    def filesMatched = changedFiles.split('\n').findAll { file ->
+                        k8sFilesToCheck.any { pattern ->
+                            file ==~ pattern
+                        }
+                    }
+                    
                     if (filesMatched.isEmpty()) {
                         currentBuild.result = 'ABORTED'
                         error "Pipeline aborted because no relevant files were modified"
