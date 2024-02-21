@@ -18,25 +18,25 @@ pipeline {
             steps {
                 script {
                     def changedFiles = sh(script: 'git diff --name-only HEAD^ HEAD', returnStdout: true).trim()
-                    def k8sFilesToCheck = ['kubernetes/*.yaml', 'config/*.yaml']
                     
                     if (changedFiles.isEmpty()) {
                         error "No changes detected in the Git repository"
                     }
                     
-                    def filesMatched = changedFiles.split('\n').findAll { file ->
-                        k8sFilesToCheck.any { pattern ->
-                            file ==~ pattern
-                        }
+                    // Filter out YAML files associated with Kubernetes manifests
+                    def filteredFiles = changedFiles.split('\n').findAll { file ->
+                        // Modify this condition based on your Kubernetes manifest file structure
+                        !(file.endsWith('.yml') && file.startsWith('kubernetes/'))
                     }
                     
-                    if (filesMatched.isEmpty()) {
+                    if (filteredFiles.isEmpty()) {
                         currentBuild.result = 'ABORTED'
                         error "Pipeline aborted because no relevant files were modified"
                     }
                 }
             }
         }
+
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
