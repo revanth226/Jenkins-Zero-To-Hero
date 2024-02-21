@@ -31,6 +31,7 @@ pipeline {
                     }
                 }
             }
+        }
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
