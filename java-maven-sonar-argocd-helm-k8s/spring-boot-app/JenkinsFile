@@ -6,6 +6,24 @@ pipeline {
     }
   }
   stages {
+
+     stage('Check Changes') {
+            steps {
+                script {
+                    // Check if Kubernetes manifests or specific files/folders are modified
+                    def changedFiles = sh(script: 'git diff --name-only HEAD^ HEAD', returnStdout: true).trim().split('\n')
+                    def k8sFilesToCheck = ['*.yaml'] // Define Kubernetes manifests or specific files/folders to check
+                    
+                    // Check if any changed files match the ones to check
+                    def filesMatched = changedFiles.intersect(k8sFilesToCheck)
+                    
+                    // If no matching files are found, abort the build
+                    if (filesMatched.isEmpty()) {
+                        currentBuild.result = 'ABORTED'
+                        error "Pipeline aborted because no relevant files were modified"
+                    }
+                }
+            }
     stage('Checkout') {
       steps {
         sh 'echo passed'
